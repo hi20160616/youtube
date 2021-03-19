@@ -2,6 +2,7 @@ package youtube
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -105,6 +106,34 @@ func TestDownload_WhenPlayabilityStatusIsNotOK(t *testing.T) {
 			_, err := testClient.GetVideo(tc.videoID)
 			require.Error(t, err)
 			require.Contains(t, err.Error(), tc.err)
+		})
+	}
+}
+
+func TestExtractDataFromPlayerResponse(t *testing.T) {
+	tcs := []struct {
+		issue   string
+		videoID string
+	}{
+		{
+			issue:   "get thumbnails and print it",
+			videoID: "rBY3N3KBtzQ",
+		},
+		{
+			issue:   "get thumbnails and print it",
+			videoID: "tJ2tw7TqnKs",
+		},
+	}
+
+	for _, tc := range tcs {
+		t.Run(tc.issue, func(t *testing.T) {
+			video, err := testClient.GetVideo(tc.videoID)
+			if err != nil {
+				t.Error(err)
+			}
+			for _, thumbnail := range video.Thumbnails {
+				fmt.Println(thumbnail)
+			}
 		})
 	}
 }

@@ -10,9 +10,16 @@ import (
 	"time"
 )
 
+type Thumbnail struct {
+	Width  int
+	Height int
+	URL    string
+}
+
 type Video struct {
 	ID              string
 	Title           string
+	Thumbnails      []*Thumbnail
 	Description     string
 	Author          string
 	Duration        time.Duration
@@ -104,6 +111,13 @@ func (v *Video) extractDataFromPlayerResponse(prData playerResponseData) error {
 
 	if seconds, _ := strconv.Atoi(prData.Microformat.PlayerMicroformatRenderer.LengthSeconds); seconds > 0 {
 		v.Duration = time.Duration(seconds) * time.Second
+	}
+
+	ts := prData.VideoDetails.Thumbnail.Thumbnails
+	if len(ts) > 0 {
+		for _, t := range ts {
+			v.Thumbnails = append(v.Thumbnails, &Thumbnail{Width: t.Width, Height: t.Height, URL: t.URL})
+		}
 	}
 
 	// Assign Streams
