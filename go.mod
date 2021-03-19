@@ -3,6 +3,7 @@ module github.com/hi20160616/youtube/v2
 go 1.15
 
 require (
+	github.com/kkdai/youtube/v2 v2.5.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/cobra v1.1.1
